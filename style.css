@@ -1,447 +1,99 @@
-* {
-  box-sizing: border-box;
+body{
+margin:0;
+font-family:sans-serif;
+background:#020617;
+color:white;
 }
 
-:root {
-  --bg-1: #070b16;
-  --bg-2: #0c1222;
-  --panel: rgba(255, 255, 255, 0.08);
-  --panel-strong: rgba(255, 255, 255, 0.12);
-  --line: rgba(255, 255, 255, 0.12);
-  --text-main: #f8fafc;
-  --text-sub: rgba(248, 250, 252, 0.74);
-  --shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.45);
-  --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.28);
-  --glow-blue: 0 0 28px rgba(59, 130, 246, 0.25);
-  --glow-purple: 0 0 28px rgba(168, 85, 247, 0.22);
-  --radius-xl: 30px;
-  --radius-lg: 24px;
+.hidden{display:none}
+
+#intro{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+background:black;
+transition:1s;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
+#intro.fade{opacity:0}
+
+#intro img{width:300px}
+
+/* 제목 */
+.title{
+text-align:center;
+font-size:42px;
+margin:20px;
 }
 
-body {
-  font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.20), transparent 22%),
-    radial-gradient(circle at 85% 18%, rgba(168, 85, 247, 0.17), transparent 20%),
-    radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.12), transparent 30%),
-    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
-  overflow-x: hidden;
+/* 버튼 */
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+padding:20px;
 }
 
-.hidden {
-  display: none !important;
+.card{
+height:160px;
+border-radius:20px;
+border:none;
+font-size:26px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+transition:.2s;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* 인트로 */
-#intro {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background:
-    radial-gradient(circle at center, rgba(59, 130, 246, 0.18), transparent 28%),
-    linear-gradient(180deg, #050914 0%, #0a1120 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  transition: opacity 0.9s ease;
+.card:hover{transform:translateY(-5px) scale(1.05)}
+.card:active{transform:scale(.95)}
+
+.near{background:#3b82f6}
+.across{background:#10b981}
+.car{background:#ef4444}
+.all{background:#f59e0b}
+
+/* 결과 */
+.result{
+margin:20px;
+padding:20px;
+border-radius:20px;
+text-align:center;
+font-size:24px;
+background:#020617;
+border:2px solid #38bdf8;
 }
 
-#intro.fade-out {
-  opacity: 0;
-  pointer-events: none;
+.spinning{
+border-color:#f59e0b;
+animation:pulse .3s infinite alternate;
 }
 
-.intro-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 26px 26px;
-  opacity: 0.35;
+@keyframes pulse{
+from{transform:scale(1)}
+to{transform:scale(1.05)}
 }
 
-.intro-inner {
-  position: relative;
-  width: min(92vw, 760px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.final{
+animation:pop .4s ease;
 }
 
-#logo {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 760px;
-  max-height: 78vh;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 20px 46px rgba(0, 0, 0, 0.42));
+@keyframes pop{
+0%{transform:scale(.6)}
+100%{transform:scale(1)}
 }
 
-.intro-glow {
-  position: absolute;
-  width: 70%;
-  height: 28%;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.30), transparent 70%);
-  filter: blur(26px);
-  bottom: 8%;
-  z-index: 1;
-}
+/* 리스트 */
+#list{padding:20px}
 
-/* 앱 */
-#app {
-  min-height: 100vh;
-}
-
-.screen {
-  display: none;
-  min-height: 100vh;
-  padding: 24px 18px 40px;
-}
-
-.screen.active {
-  display: block;
-}
-
-/* 공통 쉘 */
-.home-shell,
-.category-shell {
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-/* 메인 상단 */
-.home-top {
-  text-align: center;
-  margin-bottom: 26px;
-}
-
-.eyebrow,
-.category-eyebrow {
-  margin: 0 0 10px;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  color: #7dd3fc;
-  text-transform: uppercase;
-}
-
-.main-title {
-  margin: 0;
-  font-size: clamp(38px, 6vw, 68px);
-  line-height: 1.05;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
-}
-
-.main-desc {
-  margin: 12px 0 0;
-  font-size: clamp(15px, 2vw, 20px);
-  color: var(--text-sub);
-}
-
-/* 메인 카드 그리드 */
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.menu-card {
-  position: relative;
-  min-height: 220px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  padding: 26px;
-  overflow: hidden;
-  color: #fff;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: var(--shadow-deep);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-  isolation: isolate;
-}
-
-.menu-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03));
-  z-index: 0;
-}
-
-.menu-card::after {
-  content: "";
-  position: absolute;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  right: -60px;
-  bottom: -60px;
-  background: rgba(255,255,255,0.10);
-  z-index: 0;
-}
-
-.menu-card:hover {
-  transform: translateY(-6px) scale(1.012);
-  box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.48),
-    0 0 24px rgba(255, 255, 255, 0.05);
-  filter: brightness(1.05);
-}
-
-.menu-card:active {
-  transform: scale(0.985);
-}
-
-.menu-icon,
-.menu-title,
-.menu-sub {
-  position: relative;
-  z-index: 1;
-  display: block;
-}
-
-.menu-icon {
-  font-size: 34px;
-  margin-bottom: 18px;
-}
-
-.menu-title {
-  font-size: clamp(30px, 4vw, 46px);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.menu-sub {
-  margin-top: 12px;
-  font-size: clamp(15px, 1.8vw, 19px);
-  font-weight: 700;
-  color: rgba(255,255,255,0.88);
-}
-
-.menu-card.near {
-  background:
-    radial-gradient(circle at top right, rgba(147, 197, 253, 0.22), transparent 30%),
-    linear-gradient(135deg, #2563eb, #1d4ed8 55%, #1e40af);
-  box-shadow: var(--shadow-deep), var(--glow-blue);
-}
-
-.menu-card.across {
-  background:
-    radial-gradient(circle at top right, rgba(134, 239, 172, 0.20), transparent 30%),
-    linear-gradient(135deg, #059669, #047857 55%, #065f46);
-}
-
-.menu-card.car {
-  background:
-    radial-gradient(circle at top right, rgba(252, 165, 165, 0.20), transparent 30%),
-    linear-gradient(135deg, #ef4444, #dc2626 55%, #991b1b);
-}
-
-.menu-card.all {
-  background:
-    radial-gradient(circle at top right, rgba(253, 224, 71, 0.22), transparent 30%),
-    linear-gradient(135deg, #f59e0b, #d97706 55%, #b45309);
-  box-shadow: var(--shadow-deep), 0 0 28px rgba(245, 158, 11, 0.22);
-}
-
-/* 랜덤 결과 박스 */
-.random-box {
-  margin-top: 24px;
-  border: 1px solid var(--line);
-  border-radius: 26px;
-  padding: 24px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-soft);
-  text-align: center;
-}
-
-.random-status {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #7dd3fc;
-}
-
-.random-name {
-  margin-top: 16px;
-  font-size: clamp(32px, 5vw, 46px);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.random-menu {
-  margin-top: 10px;
-  font-size: clamp(16px, 2vw, 20px);
-  color: rgba(255,255,255,0.9);
-}
-
-.random-box.spinning {
-  border-color: rgba(245, 158, 11, 0.75);
-  box-shadow:
-    0 0 0 1px rgba(245, 158, 11, 0.24),
-    0 0 30px rgba(245, 158, 11, 0.18),
-    var(--shadow-soft);
-}
-
-/* 카테고리 상단 */
-.category-top-panel {
-  display: grid;
-  grid-template-columns: 180px 1fr 180px;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-soft);
-}
-
-.category-center {
-  text-align: center;
-}
-
-.category-title {
-  margin: 0;
-  font-size: clamp(30px, 4vw, 44px);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.back-btn,
-.random-btn {
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 15px 18px;
-  font-size: 16px;
-  font-weight: 800;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
-  transition: transform 0.16s ease, filter 0.16s ease;
-}
-
-.back-btn:hover,
-.random-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.04);
-}
-
-.back-btn {
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.26), rgba(148, 163, 184, 0.14));
-}
-
-.random-btn {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-/* 식당 리스트 */
-.restaurant-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.restaurant-card {
-  position: relative;
-  border-radius: 26px;
-  padding: 22px 22px 24px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
-  color: #111827;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
-}
-
-.restaurant-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 6px;
-  background: linear-gradient(180deg, #38bdf8, #6366f1);
-}
-
-.restaurant-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #dbeafe, #c7d2fe);
-  color: #1e3a8a;
-  font-size: 14px;
-  font-weight: 900;
-}
-
-.restaurant-name {
-  margin: 14px 0 8px;
-  font-size: clamp(24px, 3vw, 30px);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.restaurant-menu {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.65;
-  color: #374151;
-}
-
-.restaurant-bottom-line {
-  margin-top: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(99,102,241,0.25), transparent);
-}
-
-/* 모바일 */
-@media (max-width: 920px) {
-  .menu-grid,
-  .restaurant-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .category-top-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .category-center {
-    text-align: left;
-  }
-
-  .menu-card {
-    min-height: 150px;
-    border-radius: 24px;
-  }
-
-  .menu-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
-
-  .random-box {
-    padding: 20px;
-  }
+.item{
+background:white;
+color:black;
+padding:14px;
+margin:10px 0;
+border-radius:12px;
+font-size:18px;
 }
