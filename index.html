@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘 뭐먹어?</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 인트로 -->
+  <div id="intro">
+    <div class="intro-overlay"></div>
+    <div class="intro-inner">
+      <img src="logo.png" alt="오늘 뭐먹어 로고" id="logo" />
+      <div class="intro-glow"></div>
+    </div>
+  </div>
+
+  <!-- 앱 -->
+  <div id="app" class="hidden">
+    <!-- 메인 화면 -->
+    <section id="homeScreen" class="screen active">
+      <div class="home-shell">
+        <div class="home-top">
+          <p class="eyebrow">LUNCH SELECT SYSTEM</p>
+          <h1 class="main-title">오늘 뭐먹어?</h1>
+          <p class="main-desc">송내는 갈데가 없어</p>
+        </div>
+
+        <div class="menu-grid">
+          <button class="menu-card near" data-category="near">
+            <span class="menu-icon">📍</span>
+            <span class="menu-title">근처</span>
+            <span class="menu-sub">가까운데로 빠르게</span>
+          </button>
+
+          <button class="menu-card across" data-category="across">
+            <span class="menu-icon">🚶</span>
+            <span class="menu-title">길건너</span>
+            <span class="menu-sub">투나쪽으로</span>
+          </button>
+
+          <button class="menu-card car" data-category="car">
+            <span class="menu-icon">🚗</span>
+            <span class="menu-title">차로 이동</span>
+            <span class="menu-sub">빨리 가자</span>
+          </button>
+
+          <button class="menu-card all" id="allRandomBtn">
+            <span class="menu-icon">🎲</span>
+            <span class="menu-title">전체랜덤</span>
+            <span class="menu-sub">고민 없이 바로 결정</span>
+          </button>
+        </div>
+
+        <div id="homeRandomResult" class="random-box hidden"></div>
+      </div>
+    </section>
+
+    <!-- 카테고리 화면 -->
+    <section id="categoryScreen" class="screen">
+      <div class="category-shell">
+        <div class="category-top-panel">
+          <div class="category-left">
+            <button id="backBtn" class="back-btn">← 뒤로가기</button>
+          </div>
+
+          <div class="category-center">
+            <p class="category-eyebrow">CATEGORY MODE</p>
+            <h2 id="categoryTitle" class="category-title"></h2>
+          </div>
+
+          <div class="category-right">
+            <button id="categoryRandomBtn" class="random-btn">🎲 랜덤 추천</button>
+          </div>
+        </div>
+
+        <div id="categoryRandomResult" class="random-box hidden"></div>
+
+        <div id="restaurantList" class="restaurant-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
