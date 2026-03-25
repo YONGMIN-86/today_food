@@ -33,7 +33,7 @@ const restaurantData = {
       { name: "김치찌게", menu: "생고기김치찌게, 계란말이" },
       { name: "돈까스 마음", menu: "돈까스" },
       { name: "정아각", menu: "짬뽕" },
-      { name: "뚝배기", menu: "파스타, 리조또" },
+      { name: "뚝배기", menu: "파스타, 리조또" }
     ]
   },
   car: {
@@ -45,8 +45,7 @@ const restaurantData = {
       { name: "팔당짬뽕", menu: "쭈꾸미, 짬뽕" },
       { name: "육대장", menu: "육계장 칼국수" },
       { name: "부평 닭한마리", menu: "묵은지 닭한마리" },
-      { name: "바베큐타운", menu: "등갈비김치찜, 고등어김치찜" },
-
+      { name: "바베큐타운", menu: "등갈비김치찜, 고등어김치찜" }
     ]
   }
 };

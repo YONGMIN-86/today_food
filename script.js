@@ -1,121 +1,205 @@
-const intro=document.getElementById("intro");
-const app=document.getElementById("app");
+const intro = document.getElementById("intro");
+const app = document.getElementById("app");
 
-const home=document.getElementById("home");
-const category=document.getElementById("category");
+const homeScreen = document.getElementById("homeScreen");
+const categoryScreen = document.getElementById("categoryScreen");
 
-const buttons=document.querySelectorAll(".card[data]");
-const allBtn=document.getElementById("allBtn");
+const categoryButtons = document.querySelectorAll(".menu-card[data-category]");
+const allRandomBtn = document.getElementById("allRandomBtn");
+const homeRandomResult = document.getElementById("homeRandomResult");
 
-const result=document.getElementById("result");
-const result2=document.getElementById("result2");
+const backBtn = document.getElementById("backBtn");
+const categoryTitle = document.getElementById("categoryTitle");
+const categoryRandomBtn = document.getElementById("categoryRandomBtn");
+const categoryRandomResult = document.getElementById("categoryRandomResult");
+const restaurantList = document.getElementById("restaurantList");
 
-const list=document.getElementById("list");
-
-const back=document.getElementById("back");
-const title=document.getElementById("title");
-const randomBtn=document.getElementById("random");
-
-let current=[];
-let spinning=false;
+let currentCategoryKey = null;
+let introClosed = false;
+let isSpinning = false;
+let spinTimeout = null;
 
 /* 인트로 */
-window.onload=()=>{
-setTimeout(()=>{
-intro.classList.add("fade");
-setTimeout(()=>{
-intro.style.display="none";
-app.classList.remove("hidden");
-},1000);
-},2000);
-};
-
-/* 랜덤 */
-function rand(arr){
-return arr[Math.floor(Math.random()*arr.length)];
-}
-
-/* 슬롯머신 */
-function spin(target,data){
-
-if(spinning)return;
-spinning=true;
-
-target.classList.remove("hidden");
-target.classList.add("spinning");
-
-let step=0;
-
-function run(){
-
-const r=rand(data);
-
-target.innerHTML=`띠릭${".".repeat(step%3+1)}<br><br>${r.name}<br>${r.menu}`;
-
-step++;
-
-if(step<25){
-setTimeout(run,50+step*10);
-}else{
-
-const final=rand(data);
-
-target.innerHTML=`🎉 추천 완료<br><br><strong>${final.name}</strong><br>${final.menu}`;
-
-target.classList.remove("spinning");
-target.classList.add("final");
-
-spinning=false;
-}
-}
-
-run();
-}
-
-/* 리스트 */
-function show(arr){
-list.innerHTML=arr.map(x=>`
-<div class="item">
-<strong>${x.name}</strong><br>
-${x.menu}
-</div>
-`).join("");
-}
-
-/* 카테고리 이동 */
-buttons.forEach(b=>{
-b.onclick=()=>{
-const key=b.getAttribute("data");
-
-current=restaurantData[key].restaurants;
-
-title.innerText=restaurantData[key].title;
-
-show(current);
-
-home.classList.remove("active");
-category.classList.add("active");
-};
+window.addEventListener("load", () => {
+  setTimeout(closeIntro, 2000);
 });
 
-/* 뒤로 */
-back.onclick=()=>{
-category.classList.remove("active");
-home.classList.add("active");
-};
+function closeIntro() {
+  if (introClosed) return;
+  introClosed = true;
+
+  app.classList.remove("hidden");
+  intro.classList.add("fade-out");
+
+  setTimeout(() => {
+    intro.style.display = "none";
+  }, 900);
+}
+
+intro.addEventListener("click", closeIntro);
+
+/* 화면 전환 */
+function showHomeScreen() {
+  homeScreen.classList.add("active");
+  categoryScreen.classList.remove("active");
+}
+
+function showCategoryScreen() {
+  homeScreen.classList.remove("active");
+  categoryScreen.classList.add("active");
+}
+
+/* 랜덤 */
+function getRandomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function setButtonsDisabled(disabled) {
+  categoryButtons.forEach((button) => {
+    button.disabled = disabled;
+    button.style.pointerEvents = disabled ? "none" : "auto";
+    button.style.opacity = disabled ? "0.7" : "1";
+  });
+
+  allRandomBtn.disabled = disabled;
+  allRandomBtn.style.pointerEvents = disabled ? "none" : "auto";
+  allRandomBtn.style.opacity = disabled ? "0.7" : "1";
+
+  categoryRandomBtn.disabled = disabled;
+  categoryRandomBtn.style.pointerEvents = disabled ? "none" : "auto";
+  categoryRandomBtn.style.opacity = disabled ? "0.7" : "1";
+
+  backBtn.disabled = disabled;
+  backBtn.style.pointerEvents = disabled ? "none" : "auto";
+  backBtn.style.opacity = disabled ? "0.7" : "1";
+}
+
+function setRandomBoxContent(target, status, item) {
+  target.innerHTML = `
+    <div class="random-status">${status}</div>
+    <div class="random-name">${item.name}</div>
+    <div class="random-menu">${item.menu}</div>
+  `;
+}
+
+function clearSpinTimeout() {
+  if (spinTimeout) {
+    clearTimeout(spinTimeout);
+    spinTimeout = null;
+  }
+}
+
+function runRandomEffect(target, list, spinningText, finalText) {
+  if (isSpinning || !list || list.length === 0) return;
+
+  clearSpinTimeout();
+  isSpinning = true;
+  setButtonsDisabled(true);
+
+  target.classList.remove("hidden");
+  target.classList.add("spinning");
+  target.classList.remove("random-final");
+
+  let step = 0;
+  const maxStep = 24;
+
+  function spin() {
+    const item = getRandomItem(list);
+    const dots = ".".repeat((step % 3) + 1);
+
+    setRandomBoxContent(target, `${spinningText}${dots}`, item);
+
+    step += 1;
+
+    if (step < maxStep) {
+      const speed = 55 + step * 12;
+      spinTimeout = setTimeout(spin, speed);
+    } else {
+      const finalItem = getRandomItem(list);
+
+      setRandomBoxContent(target, finalText, finalItem);
+
+      target.classList.remove("spinning");
+      target.classList.add("random-final");
+
+      isSpinning = false;
+      setButtonsDisabled(false);
+      clearSpinTimeout();
+    }
+  }
+
+  spin();
+}
+
+/* 식당 카드 */
+function createRestaurantCard(item, index) {
+  return `
+    <article class="restaurant-card">
+      <div class="restaurant-number">${index + 1}</div>
+      <h3 class="restaurant-name">${item.name}</h3>
+      <p class="restaurant-menu">${item.menu}</p>
+      <div class="restaurant-bottom-line"></div>
+    </article>
+  `;
+}
+
+/* 카테고리 열기 */
+function openCategory(categoryKey) {
+  currentCategoryKey = categoryKey;
+
+  const category = restaurantData[categoryKey];
+  categoryTitle.textContent = category.title;
+
+  restaurantList.innerHTML = category.restaurants
+    .map((item, index) => createRestaurantCard(item, index))
+    .join("");
+
+  categoryRandomResult.classList.add("hidden");
+  categoryRandomResult.classList.remove("spinning", "random-final");
+  categoryRandomResult.innerHTML = "";
+
+  showCategoryScreen();
+}
+
+/* 메인 버튼 */
+categoryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    openCategory(button.dataset.category);
+  });
+});
+
+allRandomBtn.addEventListener("click", () => {
+  const allRestaurants = [
+    ...restaurantData.near.restaurants,
+    ...restaurantData.across.restaurants,
+    ...restaurantData.car.restaurants
+  ];
+
+  runRandomEffect(
+    homeRandomResult,
+    allRestaurants,
+    "RANDOM SELECTING",
+    "🎉 SELECT COMPLETE"
+  );
+});
 
 /* 카테고리 랜덤 */
-randomBtn.onclick=()=>{
-spin(result2,current);
-};
+categoryRandomBtn.addEventListener("click", () => {
+  if (!currentCategoryKey) return;
 
-/* 전체 랜덤 */
-allBtn.onclick=()=>{
-const all=[
-...restaurantData.near.restaurants,
-...restaurantData.across.restaurants,
-...restaurantData.car.restaurants
-];
+  const list = restaurantData[currentCategoryKey].restaurants;
 
-spin(result,all);
-};
+  runRandomEffect(
+    categoryRandomResult,
+    list,
+    "CATEGORY RANDOM",
+    "🎯 SELECT COMPLETE"
+  );
+});
+
+/* 뒤로가기 */
+backBtn.addEventListener("click", () => {
+  if (isSpinning) return;
+
+  showHomeScreen();
+});
