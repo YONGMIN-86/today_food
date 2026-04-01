@@ -19,7 +19,8 @@ const restaurantData = {
       { name: "청년다방", menu: "떡볶이" },
       { name: "나주곰탕", menu: "미나리곰탕, 제육볶음" },
       { name: "한신우동", menu: "우동, 돈까스" },
-      { name: "종가", menu: "한식" }
+      { name: "종가", menu: "한식" },
+      { name: "가마솥순대국밥", menu: "국밥" }
     ]
   },
   across: {
