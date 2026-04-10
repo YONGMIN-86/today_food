@@ -34,6 +34,7 @@ const restaurantData = {
       { name: "김치찌게", menu: "생고기김치찌게, 계란말이" },
       { name: "돈까스 마음", menu: "돈까스" },
       { name: "정아각", menu: "짬뽕" },
+      { name: "봄봄", menu: "한식뷔페" },
       { name: "뚝배기", menu: "파스타, 리조또" }
     ]
   },
